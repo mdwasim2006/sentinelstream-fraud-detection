@@ -40,8 +40,13 @@ async def process_transaction(
     db.add(new_txn)
     await db.commit()
 
+    from app.services.fraud_rules import evaluate_fraud
+
+    status, risk_score, reasons = evaluate_fraud(new_txn)
+
     return TransactionResponse(
-        status="APPROVED",
-        risk_score=0.10,
-        message="Transaction processed successfully"
+        status=status,
+        risk_score=risk_score,
+        message=", ".join(reasons) if reasons else "Transaction safe"
     )
+
