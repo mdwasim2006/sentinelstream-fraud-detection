@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float, DateTime
-from datetime import datetime
+from sqlalchemy.sql import func
 from app.db.database import Base
+
 
 class Transaction(Base):
     __tablename__ = "transactions"
@@ -13,4 +14,4 @@ class Transaction(Base):
     status = Column(String)
     risk_score = Column(Float)
     message = Column(String)
-    timestamp = Column(DateTime, default=datetime.utcnow)
+    timestamp = Column(DateTime(timezone=True), server_default=func.now())
